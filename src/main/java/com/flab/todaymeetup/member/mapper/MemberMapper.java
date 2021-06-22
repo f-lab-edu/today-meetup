@@ -8,5 +8,5 @@ public interface MemberMapper {
 
     void signUp(Member member);
 
-    boolean existsEmail(String email);
+    boolean isExistsEmail(String email);
 }

@@ -4,6 +4,7 @@ import com.flab.todaymeetup.member.domain.Member;
 import com.flab.todaymeetup.member.dto.MemberSignUpRequestDto;
 import com.flab.todaymeetup.member.exception.EmailDuplicateException;
 import com.flab.todaymeetup.member.mapper.MemberMapper;
+import com.flab.todaymeetup.security.Sha256Encryptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,17 +13,19 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberMapper memberMapper;
+    private final Sha256Encryptor sha256Encryptor;
 
     public void signUp(MemberSignUpRequestDto memberSignUpRequestDto) {
-        if( existsEmail(memberSignUpRequestDto.getEmail()) ) {
+        if( isExistsEmail(memberSignUpRequestDto.getEmail()) ) {
             throw new EmailDuplicateException(memberSignUpRequestDto.getEmail());
         }
 
-        Member newMember = memberSignUpRequestDto.toEntity();
+        String encryptedPassword = sha256Encryptor.encrypt(memberSignUpRequestDto.getPassword());
+        Member newMember = memberSignUpRequestDto.toEntity(encryptedPassword);
         memberMapper.signUp(newMember);
     }
 
-    public boolean existsEmail(String email) {
-        return memberMapper.existsEmail(email);
+    public boolean isExistsEmail(String email) {
+        return memberMapper.isExistsEmail(email);
     }
 }

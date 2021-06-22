@@ -9,7 +9,7 @@
         VALUES(#{email}, #{name}, #{password}, #{phone})
     </insert>
 
-    <select id="existsEmail" parameterType="string" resultType="_boolean">
+    <select id="isExistsEmail" parameterType="string" resultType="_boolean">
         SELECT
             EXISTS (
                 SELECT

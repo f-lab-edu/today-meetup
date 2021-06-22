@@ -1,7 +1,6 @@
 package com.flab.todaymeetup.member.dto;
 
 import com.flab.todaymeetup.member.domain.Member;
-import com.flab.todaymeetup.util.security.EncryptUtil;
 import lombok.Getter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,11 +26,11 @@ public class MemberSignUpRequestDto {
             regexp = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$")
     private String phone;
 
-    public Member toEntity(){
+    public Member toEntity(String encryptedPassword) {
         return Member.builder()
                     .email(email)
                     .name(name)
-                    .password(EncryptUtil.encryptSha256(password))
+                    .password(encryptedPassword)
                     .phone(phone)
                     .build();
     }
