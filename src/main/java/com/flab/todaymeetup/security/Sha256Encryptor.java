@@ -26,4 +26,9 @@ public class Sha256Encryptor implements Encryptor {
             throw new RuntimeException("암호화 수행 중 문제가 발생하였습니다.", e);
         }
     }
+
+    @Override
+    public boolean isMatch(String inputPassword, String memberPassword) {
+        return encrypt(inputPassword).equals(memberPassword);
+    }
 }
