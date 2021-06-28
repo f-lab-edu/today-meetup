@@ -41,6 +41,7 @@ public class MemberService {
         }
 
         return MemberResponseDto.builder()
+                                .id(member.getId())
                                 .email(member.getEmail())
                                 .name(member.getName())
                                 .phone(member.getPhone())
