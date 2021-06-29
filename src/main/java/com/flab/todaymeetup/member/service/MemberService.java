@@ -1,11 +1,13 @@
 package com.flab.todaymeetup.member.service;
 
 import com.flab.todaymeetup.member.domain.Member;
+import com.flab.todaymeetup.member.dto.LoginRequestDto;
 import com.flab.todaymeetup.member.dto.MemberResponseDto;
 import com.flab.todaymeetup.member.dto.MemberSignUpRequestDto;
 import com.flab.todaymeetup.member.exception.EmailDuplicateException;
 import com.flab.todaymeetup.member.mapper.MemberMapper;
 import com.flab.todaymeetup.security.Sha256Encryptor;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,16 +32,25 @@ public class MemberService {
         return memberMapper.isExistsEmail(email);
     }
 
-    public MemberResponseDto login(String email, String password) {
-        Member member = memberMapper.findByEmail(email);
+    public void login(LoginRequestDto loginRequestDto, HttpSession session) {
+        Member member = memberMapper.findByEmail(loginRequestDto.getEmail());
 
         if (member == null) {
             throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
         }
-        if (!sha256Encryptor.isMatch(password, member.getPassword())) {
+
+        if (!isPasswordMatch(loginRequestDto.getPassword(), member.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
         }
 
+        session.setAttribute("loginMember", toResponseDto(member));
+    }
+
+    public boolean isPasswordMatch(String inputPassword, String memberPassword) {
+        return sha256Encryptor.encrypt(inputPassword).equals(memberPassword);
+    }
+
+    public MemberResponseDto toResponseDto(Member member) {
         return MemberResponseDto.builder()
                                 .id(member.getId())
                                 .email(member.getEmail())

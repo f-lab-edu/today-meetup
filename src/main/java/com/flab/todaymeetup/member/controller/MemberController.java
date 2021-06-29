@@ -1,11 +1,8 @@
 package com.flab.todaymeetup.member.controller;
 
-import com.flab.todaymeetup.constant.Constant;
 import com.flab.todaymeetup.member.dto.LoginRequestDto;
-import com.flab.todaymeetup.member.dto.MemberResponseDto;
 import com.flab.todaymeetup.member.dto.MemberSignUpRequestDto;
 import com.flab.todaymeetup.member.service.MemberService;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +24,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public void login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
-        MemberResponseDto loginMember = memberService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword());
-
-        HttpSession session = request.getSession();
-        session.setAttribute(Constant.LOGIN_MEMBER, loginMember);
+    public void login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpSession session) {
+        memberService.login(loginRequestDto, session);
     }
 }
