@@ -7,7 +7,6 @@ import com.flab.todaymeetup.member.dto.MemberSignUpRequestDto;
 import com.flab.todaymeetup.member.exception.EmailDuplicateException;
 import com.flab.todaymeetup.member.mapper.MemberMapper;
 import com.flab.todaymeetup.security.Sha256Encryptor;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,7 @@ public class MemberService {
         return memberMapper.isExistsEmail(email);
     }
 
-    public void login(LoginRequestDto loginRequestDto, HttpSession session) {
+    public MemberResponseDto getLoginMember(LoginRequestDto loginRequestDto) {
         Member member = memberMapper.findByEmail(loginRequestDto.getEmail());
 
         if (member == null) {
@@ -43,7 +42,7 @@ public class MemberService {
             throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
         }
 
-        session.setAttribute("loginMember", toResponseDto(member));
+        return toResponseDto(member);
     }
 
     public boolean isPasswordMatch(String inputPassword, String memberPassword) {
