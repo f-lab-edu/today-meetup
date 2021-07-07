@@ -2,8 +2,8 @@ package com.flab.todaymeetup.member.controller;
 
 import com.flab.todaymeetup.member.dto.LoginRequestDto;
 import com.flab.todaymeetup.member.dto.MemberSignUpRequestDto;
+import com.flab.todaymeetup.member.service.LoginService;
 import com.flab.todaymeetup.member.service.MemberService;
-import com.flab.todaymeetup.member.service.SessionLoginService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
-    private final SessionLoginService sessionLoginService;
+    private final LoginService loginService;
 
     @PostMapping
     public void signUp(@Valid @RequestBody MemberSignUpRequestDto memberSignUpRequestDto) {
@@ -26,6 +26,6 @@ public class MemberController {
 
     @PostMapping("/login")
     public void login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
-        sessionLoginService.login(loginRequestDto);
+        loginService.login(loginRequestDto);
     }
 }
