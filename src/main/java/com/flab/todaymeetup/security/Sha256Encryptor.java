@@ -1,8 +1,7 @@
 package com.flab.todaymeetup.security;
 
-import org.springframework.stereotype.Component;
-
 import java.security.MessageDigest;
+import org.springframework.stereotype.Component;
 
 @Component
 public class Sha256Encryptor implements Encryptor {
@@ -10,12 +9,12 @@ public class Sha256Encryptor implements Encryptor {
     private static final String SHA_256 = "SHA-256";
 
     @Override
-    public String encrypt(String password) {
+    public String encrypt(String target) {
         try {
             MessageDigest md = MessageDigest.getInstance(SHA_256);
-            byte[] passBytes = password.getBytes();
+            byte[] targetBytes = target.getBytes();
             md.reset();
-            byte[] digested = md.digest(passBytes);
+            byte[] digested = md.digest(targetBytes);
             StringBuilder sb = new StringBuilder();
             for (byte b :digested) {
                 sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));

@@ -9,4 +9,6 @@ public interface MemberMapper {
     void signUp(Member member);
 
     boolean isExistsEmail(String email);
+
+    Member findByEmail(String email);
 }
